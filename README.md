@@ -4,7 +4,7 @@
 >
 > cargo-mobile takes care of generating Xcode and Android Studio project files, building and running on device, generating project boilerplate, and a few other things!
 
-This project is a fork of [cargo-mobile](https://github.com/BrainiumLLC/cargo-mobile/). Tauri uses it as a library dependency instead of using its CLI directly. For more information, please visit [Tauri's mobile guide](https://next--tauri.netlify.app/next/mobile/).
+This project is a fork of [cargo-mobile](https://github.com/BrainiumLLC/cargo-mobile/). Tauri uses it as a library dependency instead of using its CLI directly. For more information, please visit Tauri's [prerequisites](https://v2.tauri.app/start/prerequisites/#configure-for-mobile-targets) and [development](https://v2.tauri.app/develop/#developing-your-mobile-application) guides..
 
 In the meantime, cargo-mobile2 contains the template of wry, please follow [wry's instruction](https://github.com/tauri-apps/wry#android--ios) if you want to use with it.
 
