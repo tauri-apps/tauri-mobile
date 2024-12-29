@@ -113,7 +113,7 @@ features = [
 ]
 
 [target."cfg(windows)".build-dependencies]
-embed-resource = "2.4"
+embed-resource = "3.0"
 
 [build-dependencies]
 home = { version = "0.5", optional = true }
