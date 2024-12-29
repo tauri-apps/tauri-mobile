@@ -1,5 +1,4 @@
-
-use bevy::window::WindowMode;
+use bevy::window::{WindowMode, MonitorSelection};
 use bevy::{color::palettes::css::PURPLE, prelude::*};
 use winit::event_loop::EventLoop;
 
@@ -33,7 +32,7 @@ pub fn main() {
             primary_window: Some(Window {
                 name: Some("{{app.stylized-name}}".to_string()),
                 resizable: false,
-                mode: WindowMode::BorderlessFullscreen,
+                mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
                 ..default()
             }),
             ..default()
@@ -68,11 +67,13 @@ fn setup_audio(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 fn setup_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
-        .spawn(SpriteBundle {
-            texture: asset_server.load("textures/bevy.png"),
-            transform: Transform::from_translation(Vec3::new(0., 0., 1.)),
-            ..Default::default()
-        })
+        .spawn((
+            Sprite {
+                image: asset_server.load("textures/bevy.png"),
+                ..Default::default()
+            },
+            Transform::from_translation(Vec3::new(0., 0., 1.)),
+        ))
         .insert(Player);
 }
 
@@ -133,7 +134,7 @@ pub fn handle_touch(
 
     if let Some(touch_position) = touch_input.first_pressed_position() {
         let (camera, camera_transform) = camera.single();
-        if let Some(touch_position) = camera.viewport_to_world_2d(camera_transform, touch_position)
+        if let Some(touch_position) = camera.viewport_to_world_2d(camera_transform, touch_position).ok()
         {
             let diff = touch_position - player.single().translation.xy();
             if diff.length() > FOLLOW_EPSILON {
@@ -162,8 +163,8 @@ fn move_player(
     }
     let speed = 150.;
     let movement = Vec3::new(
-        actions.player_movement.unwrap().x * speed * time.delta_seconds(),
-        actions.player_movement.unwrap().y * speed * time.delta_seconds(),
+        actions.player_movement.unwrap().x * speed * time.delta_secs(),
+        actions.player_movement.unwrap().y * speed * time.delta_secs(),
         0.,
     );
     for mut player_transform in &mut player_query {
@@ -179,7 +180,7 @@ fn move_player(
         Ok(_) => {}
         Err(_) => {
             commands.spawn((AudioBundle {
-                source: audio.clone(),
+                source: bevy::prelude::AudioPlayer(audio.clone()),
                 settings: PlaybackSettings::DESPAWN,
                 ..default()
             },));

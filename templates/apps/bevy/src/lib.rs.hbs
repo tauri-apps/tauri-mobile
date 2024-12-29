@@ -1,4 +1,4 @@
-use bevy::window::WindowMode;
+use bevy::window::{WindowMode, MonitorSelection};
 use bevy::prelude::*;
 
 #[bevy_main]
@@ -8,7 +8,7 @@ fn main() {
             primary_window: Some(Window {
                 name: Some("{{app.stylized-name}}".to_string()),
                 resizable: false,
-                mode: WindowMode::BorderlessFullscreen,
+                mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
                 ..default()
             }),
             ..default()
@@ -23,5 +23,5 @@ fn setup(
 ) {
     let texture_handle = asset_server.load("branding/icon.png");
     commands.spawn(Camera2dBundle::default());
-    commands.spawn(SpriteBundle {texture: texture_handle, ..Default::default()});
+    commands.spawn(Sprite {image: texture_handle, ..Default::default()});
 }
